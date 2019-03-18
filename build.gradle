@@ -6,7 +6,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 
 group 'xyz.xiaff.crawl'
-version '1.1.3'
+version '1.1.4'
 
 sourceCompatibility = 1.8
 

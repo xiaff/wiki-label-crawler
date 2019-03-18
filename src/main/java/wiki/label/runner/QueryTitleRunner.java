@@ -36,14 +36,11 @@ public class QueryTitleRunner implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     int num = 1000;
-    int cnt = 0;
+
     while (true) {
       Page<LabelTitleDO> labelTitleDOPage = labelTitleRepo.findAllByIdGreaterThanEqual(start, PageRequest.of(0, num));
       logger.info("||| Querying LabelTitle id[{}-{}].... |||", start, start + num);
       start += num;
-      if (!labelTitleDOPage.hasNext()) {
-        break;
-      }
       List<LabelTitleDO> labelTitleDOList = labelTitleDOPage.getContent();
       List<String> labelList = labelTitleDOList
           .stream()
@@ -53,16 +50,13 @@ public class QueryTitleRunner implements CommandLineRunner {
       List<WikiLabelDTO> wikiLabelDTOList = wikiDataQueryService.listByLabels(labelList);
       logger.info("Fetched {} wiki titles.", wikiLabelDTOList.size());
       compareAndSave(labelTitleDOList, wikiLabelDTOList);
-      // Just fetch first 1000,0000 labels
-      if (start > 10000000L) {
+
+      if (!labelTitleDOPage.hasNext()) {
         break;
       }
-/*      if (++cnt == 10) {
-        break;
-      }*/
     }
     logger.warn("I'm quitting...");
-    System.exit(2);
+    System.exit(0);
 
   }
 

@@ -6,7 +6,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 
 group 'xyz.xiaff.crawl'
-version '1.1.4'
+version '1.2.0'
 
 sourceCompatibility = 1.8
 
@@ -20,8 +20,9 @@ dependencies {
 
     compile group: 'com.alibaba', name: 'fastjson', version: '1.2.56'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    compile group: 'org.nlpcn', name: 'nlp-lang', version: '1.7.7'
 
-    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'mysql:mysql-connector-java:5.1.47'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.nlpcn.commons.lang.jianfan.JianFan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class WikiDataQueryService {
   public static final Logger logger = LoggerFactory.getLogger(WikiDataQueryService.class);
   private static final int DEFAULT_QUERY_SIZE = 50;
+  private static final String LANG_ZH = "zh";
   private static OkHttpClient CLIENT = new OkHttpClient();
   private static Random RANDOM = new Random();
 
@@ -60,7 +62,7 @@ public class WikiDataQueryService {
   private List<WikiLabelDTO> queryWikiTitle(String queryLabelStr) {
     List<WikiLabelDTO> wikiLabelDTOList = new ArrayList<>();
 
-    Request request = new Request.Builder().url("https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels&ids=" + queryLabelStr + "&format=json&languages=en|zh-cn").get().build();
+    Request request = new Request.Builder().url("https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels&ids=" + queryLabelStr + "&format=json&languages=en|"+LANG_ZH).get().build();
     try (Response response = CLIENT.newCall(request).execute()) {
       String result = response.body().string();
       JSONObject jsonObject = JSON.parseObject(result);
@@ -86,8 +88,9 @@ public class WikiDataQueryService {
           wikiLabelDTO.setTitleEn(titleEn);
           wikiLabelDTO.setTitleEnLower(titleEnLower);
         }
-        if (labelsJson.containsKey("zh-cn")) {
-          String titleCn = labelsJson.getJSONObject("zh-cn").getString("value");
+        if (labelsJson.containsKey(LANG_ZH)) {
+          String titleCn = labelsJson.getJSONObject(LANG_ZH).getString("value");
+          titleCn = JianFan.f2j(titleCn);
           wikiLabelDTO.setTitleCn(titleCn);
         }
         wikiLabelDTOList.add(wikiLabelDTO);

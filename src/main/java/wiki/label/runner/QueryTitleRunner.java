@@ -88,8 +88,10 @@ public class QueryTitleRunner implements CommandLineRunner {
             }
         }
 
-        logger.info("last in line: {}.", toSaveTitleDOList.get(toSaveTitleDOList.size() - 1));
-        labelTitleRepo.saveAll(toSaveTitleDOList);
+        if (toSaveTitleDOList.size() > 0) {
+            logger.info("last in line: {}.", toSaveTitleDOList.get(toSaveTitleDOList.size() - 1));
+            labelTitleRepo.saveAll(toSaveTitleDOList);
+        }
 
     }
 }

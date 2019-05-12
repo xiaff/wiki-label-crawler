@@ -78,6 +78,9 @@ public class QueryTitleRunner implements CommandLineRunner {
                 if (wikiLabelDTO.getTitleEn() != null && wikiLabelDTO.getTitleEn().length() > 200) {
                     continue;
                 }
+                if (StringUtils.isEmpty(wikiLabelDTO.getTitleCn())) {
+                    continue;
+                }
                 labelTitleDO.setTitleEn(wikiLabelDTO.getTitleEn());
                 labelTitleDO.setTitleEnLower(wikiLabelDTO.getTitleEnLower());
                 labelTitleDO.setTitleCn(wikiLabelDTO.getTitleCn());

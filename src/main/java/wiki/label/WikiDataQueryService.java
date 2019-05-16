@@ -1,6 +1,7 @@
 package wiki.label;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -65,7 +66,14 @@ public class WikiDataQueryService {
     Request request = new Request.Builder().url("https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels&ids=" + queryLabelStr + "&format=json&languages=en|"+LANG_ZH).get().build();
     try (Response response = CLIENT.newCall(request).execute()) {
       String result = response.body().string();
-      JSONObject jsonObject = JSON.parseObject(result);
+      JSONObject jsonObject;
+      try {
+        jsonObject = JSON.parseObject(result);
+      }catch (JSONException e){
+        logger.error("JSON unsuccessful: {}.", e.getMessage());
+        return null;
+      }
+
       boolean success = jsonObject.getBoolean("success");
       if (!success) {
         logger.error("Query unsuccessful: {}", jsonObject);
